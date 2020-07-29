@@ -1,5 +1,5 @@
 <?php 
-$announcement_api;
+$announcement_api_url = "http://34.80.207.185/blackfin/API/main.php?view=annoucement";
 
 function catchApi($showWho){
 $curl = curl_init();
@@ -17,35 +17,32 @@ $response = curl_exec($curl);
 curl_close($curl);
 return json_decode($response);
 }
-$announcement_api = catchApi("http://34.80.207.185/blackfin/API/main.php?view=annoucement");
-print_r($announcement_api);
-function showAnnouncemnt($type){
-  $apireturn = "";
-  global $announcement_api;
-  for($i = 0;$i<count($announcement_api);$i++){
-    $announcement_catch_type = $announcement_api[$i]->announcementType;
-    $announcement_catch_title = $announcement_api[$i]->announcementTitle;
-    $announcement_catch_text = $announcement_api[$i]->announcementText;
-    if($type == "all"){
-      $apireturn = $apireturn."<tr><td>".$announcement_catch_type."</td><td>".$announcement_catch_title."</td><td>".$announcement_catch_text."</td></tr>";
-    }else if($type == "event"){
-      if($announcement_catch_type == "活動"){
-        $apireturn = $apireturn."<tr><td>".$announcement_catch_type."</td><td>".$announcement_catch_title."</td><td>".$announcement_catch_text."</td></tr>";
-      }
-    }else if($type == "sale"){
-      if($announcement_catch_type == "優惠"){
-        $apireturn = $apireturn."<tr><td>".$announcement_catch_type."</td><td>".$announcement_catch_title."</td><td>".$announcement_catch_text."</td></tr>";
-      }else if($type == "ann"){
-        if($announcement_catch_type == "公告"){
-          $apireturn = $apireturn."<tr><td>".$announcement_catch_type."</td><td>".$announcement_catch_title."</td><td>".$announcement_catch_text."</td></tr>";
-      }
-    }
-  }
-  }
-  return  $apireturn;  
-}
-
-      
+$announcement_api =json_encode( catchApi("http://34.80.207.185/blackfin/API/main.php?view=annoucement"));
+// function showAnnouncemnt($type){
+//   $apireturn = "";
+//   global $announcement_api;
+//   for($i = 0;$i<count($announcement_api);$i++){
+//     $announcement_catch_type = $announcement_api[$i]->announcementType;
+//     $announcement_catch_title = $announcement_api[$i]->announcementTitle;
+//     $announcement_catch_text = $announcement_api[$i]->announcementText;
+//     if($type == "all"){
+//       $apireturn = $apireturn."<tr><td>".$announcement_catch_type."</td><td>".$announcement_catch_title."</td><td>".$announcement_catch_text."</td></tr>";
+//     }else if($type == "event"){
+//       if($announcement_catch_type == "活動"){
+//         $apireturn = $apireturn."<tr><td>".$announcement_catch_type."</td><td>".$announcement_catch_title."</td><td>".$announcement_catch_text."</td></tr>";
+//       }
+//     }else if($type == "sale"){
+//       if($announcement_catch_type == "優惠"){
+//         $apireturn = $apireturn."<tr><td>".$announcement_catch_type."</td><td>".$announcement_catch_title."</td><td>".$announcement_catch_text."</td></tr>";
+//       }else if($type == "ann"){
+//         if($announcement_catch_type == "公告"){
+//           $apireturn = $apireturn."<tr><td>".$announcement_catch_type."</td><td>".$announcement_catch_title."</td><td>".$announcement_catch_text."</td></tr>";
+//       }
+//     }
+//   }
+//   }
+//   return  $apireturn;  
+// }
 //    if(isset($_GET['allBotton'])){
 //       showAnnouncemnt("all");
 //    }
@@ -77,13 +74,72 @@ function showAnnouncemnt($type){
   <link href="assets/vendor/owl.carousel/assets/owl.carousel.min.css" rel="stylesheet">
   <!-- Template Main CSS File -->
   <link href="assets/css/style.css" rel="stylesheet">
+  <script>
+  let firstLoad = true;
+  let apireturn = "";
+  let announcement_catch_type="";
+  let announcement_catch_title="";
+  let announcement_catch_text="";
+  let announcemntJson = '<?= $announcement_api?>';
+  announcemntJson = JSON.parse(announcemntJson);
 
+  function showAnnouncemnt(type){
+  console.log("E");
+  //document.getElementById('annoucement').innerHTML="";
+  console.log(announcemntJson);
+  // console.log(announcemntJson.length);
+  announcement_catch_type="";
+  announcement_catch_title="";
+  announcement_catch_text="";
+  apireturn = "<table class=\"table table-hover\"><tr><td><button type=\"button\" class=\"btn btn-danger\" id=\"all_button\">全部</button><button type=\"button\" class=\"btn btn-success\" id=\"ann_button\">公告</button><button type=\"button\" class=\"btn btn-info\" id=\"event_button\">活動</button><button type=\"button\" class=\"btn btn-warning\" id=\"sale_button\">優惠</button></td></tr>";
+  for(i = 0;i<announcemntJson.length;i++){
+    announcement_catch_type = announcemntJson[i].announcementType;
+    announcement_catch_title = announcemntJson[i].announcementTitle;
+    announcement_catch_text = announcemntJson[i].announcementText;
+    if(type == "all"){
+      apireturn = apireturn+"<tr><td>"+announcement_catch_type+"</td><td>"+announcement_catch_title+"</td><td>"+announcement_catch_text+"</td></tr>";
+    }else if(type == "event"){
+      if(announcement_catch_type == "活動"){
+        apireturn = apireturn+"<tr><td>"+announcement_catch_type+"</td><td>"+announcement_catch_title+"</td><td>"+announcement_catch_text+"</td></tr>";
+      }
+    }else if(type == "sale"){
+      if(announcement_catch_type == "優惠"){
+        apireturn = apireturn+"<tr><td>"+announcement_catch_type+"</td><td>"+announcement_catch_title+"</td><td>"+announcement_catch_text+"</td></tr>";
+      }
+  }else if(type == "ann"){
+        console.log("公告");
+        if(announcement_catch_type == "公告"){
+          console.log("公告");
+          apireturn = apireturn+"<tr><td>"+announcement_catch_type+"</td><td>"+announcement_catch_title+"</td><td>"+announcement_catch_text+"</td></tr>";
+      }
+    }
+  }
+  apireturn = apireturn+"</table></div>";
+  console.log(apireturn);
+  document.getElementById('annoucement').innerHTML=apireturn;
+  document.getElementById("all_button").addEventListener("click", function(){
+            showAnnouncemnt("all");});
+
+            document.getElementById("ann_button").addEventListener("click", function(){
+            showAnnouncemnt("ann");});
+
+            document.getElementById("event_button").addEventListener("click", function(){
+            showAnnouncemnt("event");});
+
+            document.getElementById("sale_button").addEventListener("click", function(){
+            showAnnouncemnt("sale");});
+}
+//document.getElementById('annoucement').innerHTML=showAnnouncemnt("all");
+
+ </script>
   <!-- =======================================================
   * Template Name: KnightOne - v2.1.0
   * Template URL: https://bootstrapmade.com/knight-simple-one-page-bootstrap-template/
   * Author: BootstrapMade.com
   * License: https://bootstrapmade.com/license/
   ======================================================== -->
+
+
 </head>
 
 <body>
@@ -160,7 +216,8 @@ function showAnnouncemnt($type){
 
         <div class="row content">
           <div class="col-lg-6">
-            <table class="table table-hover">
+          <div id="annoucement">  
+            <!-- <table class="table table-hover">
             <tr>
               <td>
                 <button type="button" class="btn btn-danger" id="all_button">全部</button>
@@ -168,14 +225,20 @@ function showAnnouncemnt($type){
                 <button type="button" class="btn btn-info">活動</button>
                 <button type="button" class="btn btn-warning">優惠</button>
               </td>
-            </tr>
-          <script>
-          document.getElementById("all_button").addEventListener("click", function(){
-            document.write("<?php echo showAnnouncemnt("all")?>");
-          });
-          </script>
-            </table>
+            </tr> -->
 
+            <!-- </table>
+            </div> -->
+          <!-- <script>
+          document.getElementById("all_button").addEventListener("click", function(){
+          document.inner(showAnnouncemnt("all"));
+           });
+          </script> -->
+          <script>
+            showAnnouncemnt("all");
+
+
+          </script>
             <ul>
               <li><i class="ri-check-double-line"></i> Ullamco laboris nisi ut aliquip ex ea commodo consequat</li>
               <li><i class="ri-check-double-line"></i> Duis aute irure dolor in reprehenderit in voluptate velit</li>
@@ -191,7 +254,6 @@ function showAnnouncemnt($type){
             <a href="#" class="btn-learn-more">Learn More</a>
           </div>
         </div>
-
       </div>
     </section><!-- End About Us Section -->
 
@@ -757,6 +819,7 @@ function showAnnouncemnt($type){
   <script src="assets/vendor/jquery.easing/jquery.easing.min.js"></script>
   <script src="assets/vendor/php-email-form/validate.js"></script>
   <script src="assets/vendor/waypoints/jquery.waypoints.min.js"></script>
+  <!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/waypoints/2.0.5/waypoints.min.js"></script> -->
   <script src="assets/vendor/counterup/counterup.min.js"></script>
   <script src="assets/vendor/isotope-layout/isotope.pkgd.min.js"></script>
   <script src="assets/vendor/venobox/venobox.min.js"></script>
