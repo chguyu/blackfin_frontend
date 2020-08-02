@@ -1,6 +1,12 @@
 <?php 
+function unicodeDecode($unicode_str){
+  $json = '{"str":"'.$unicode_str.'"}';
+  $arr = json_decode($json,true);
+  if(empty($arr)) return '';
+  return $arr['str'];
+}
+//Announcement_API 
 $announcement_api_url = "http://34.80.207.185/blackfin/API/main.php?view=annoucement";
-
 function catchApi($showWho){
 $curl = curl_init();
 $url = $showWho;
@@ -17,37 +23,15 @@ $response = curl_exec($curl);
 curl_close($curl);
 return json_decode($response);
 }
-$announcement_api =json_encode( catchApi("http://34.80.207.185/blackfin/API/main.php?view=annoucement"));
-// function showAnnouncemnt($type){
-//   $apireturn = "";
-//   global $announcement_api;
-//   for($i = 0;$i<count($announcement_api);$i++){
-//     $announcement_catch_type = $announcement_api[$i]->announcementType;
-//     $announcement_catch_title = $announcement_api[$i]->announcementTitle;
-//     $announcement_catch_text = $announcement_api[$i]->announcementText;
-//     if($type == "all"){
-//       $apireturn = $apireturn."<tr><td>".$announcement_catch_type."</td><td>".$announcement_catch_title."</td><td>".$announcement_catch_text."</td></tr>";
-//     }else if($type == "event"){
-//       if($announcement_catch_type == "活動"){
-//         $apireturn = $apireturn."<tr><td>".$announcement_catch_type."</td><td>".$announcement_catch_title."</td><td>".$announcement_catch_text."</td></tr>";
-//       }
-//     }else if($type == "sale"){
-//       if($announcement_catch_type == "優惠"){
-//         $apireturn = $apireturn."<tr><td>".$announcement_catch_type."</td><td>".$announcement_catch_title."</td><td>".$announcement_catch_text."</td></tr>";
-//       }else if($type == "ann"){
-//         if($announcement_catch_type == "公告"){
-//           $apireturn = $apireturn."<tr><td>".$announcement_catch_type."</td><td>".$announcement_catch_title."</td><td>".$announcement_catch_text."</td></tr>";
-//       }
-//     }
-//   }
-//   }
-//   return  $apireturn;  
-// }
-//    if(isset($_GET['allBotton'])){
-//       showAnnouncemnt("all");
-//    }
-?>
+$announcement_api =json_encode(catchApi("http://34.80.207.185/blackfin/API/main.php?view=annoucement"));
 
+//Instagram_API 
+$access_token = "IGQVJYcEpZAbEQ5akktNDZA3M3UwN2ZAzU1ZAsUFlKeUtwY0Fyd0V3VTZAGR1RaLWxGV2FraHN5M1pReUFsWXFSZAXk0Sk5GREkxSmhCaTlKeHc4aVR4TmJvZAkZAUVTBnT1dBQ0tEN3gxYUhJakE1NnJDUTJGTAZDZD...";
+$instagram_api = json_encode(catchApi("https://graph.instagram.com/me/media?fields=id,media_type,media_url,permalink,timestamp,media,caption&access_token=".$access_token));
+//$instagram_api = catchApi("https://graph.instagram.com/me/media?fields=id,media_type,media_url,permalink,timestamp,media,caption&access_token=".$access_token);
+//$instagram_api = unicodeDecode($instagram_api);
+print_r($instagram_api);
+?>
 
 <!DOCTYPE html>
 <html lang="en">
@@ -82,7 +66,9 @@ $announcement_api =json_encode( catchApi("http://34.80.207.185/blackfin/API/main
   let announcement_catch_text="";
   let announcemntJson = '<?= $announcement_api?>';
   announcemntJson = JSON.parse(announcemntJson);
-
+  let instagramApi = '<?= $instagram_api?>';
+  instagramApi = JSON.parse(instagramApi);
+  document.body.inner(instagramApi);
   function showAnnouncemnt(type){
   console.log("E");
   //document.getElementById('annoucement').innerHTML="";
@@ -91,7 +77,7 @@ $announcement_api =json_encode( catchApi("http://34.80.207.185/blackfin/API/main
   announcement_catch_type="";
   announcement_catch_title="";
   announcement_catch_text="";
-  apireturn = "<table class=\"table table-hover\"><tr><td><button type=\"button\" class=\"btn btn-danger\" id=\"all_button\">全部</button><button type=\"button\" class=\"btn btn-success\" id=\"ann_button\">公告</button><button type=\"button\" class=\"btn btn-info\" id=\"event_button\">活動</button><button type=\"button\" class=\"btn btn-warning\" id=\"sale_button\">優惠</button></td></tr>";
+  apireturn = "<table class=\"table table-hover\"><tr><td><button type=\"button\" class=\"btn btn-danger\" id=\"all_button\">??��??</button><button type=\"button\" class=\"btn btn-success\" id=\"ann_button\">??��??</button><button type=\"button\" class=\"btn btn-info\" id=\"event_button\">活�??</button><button type=\"button\" class=\"btn btn-warning\" id=\"sale_button\">??��??</button></td></tr>";
   for(i = 0;i<announcemntJson.length;i++){
     announcement_catch_type = announcemntJson[i].announcementType;
     announcement_catch_title = announcemntJson[i].announcementTitle;
@@ -99,17 +85,17 @@ $announcement_api =json_encode( catchApi("http://34.80.207.185/blackfin/API/main
     if(type == "all"){
       apireturn = apireturn+"<tr><td>"+announcement_catch_type+"</td><td>"+announcement_catch_title+"</td><td>"+announcement_catch_text+"</td></tr>";
     }else if(type == "event"){
-      if(announcement_catch_type == "活動"){
+      if(announcement_catch_type == "活�??"){
         apireturn = apireturn+"<tr><td>"+announcement_catch_type+"</td><td>"+announcement_catch_title+"</td><td>"+announcement_catch_text+"</td></tr>";
       }
     }else if(type == "sale"){
-      if(announcement_catch_type == "優惠"){
+      if(announcement_catch_type == "??��??"){
         apireturn = apireturn+"<tr><td>"+announcement_catch_type+"</td><td>"+announcement_catch_title+"</td><td>"+announcement_catch_text+"</td></tr>";
       }
   }else if(type == "ann"){
-        console.log("公告");
-        if(announcement_catch_type == "公告"){
-          console.log("公告");
+        console.log("??��??");
+        if(announcement_catch_type == "??��??"){
+          console.log("??��??");
           apireturn = apireturn+"<tr><td>"+announcement_catch_type+"</td><td>"+announcement_catch_title+"</td><td>"+announcement_catch_text+"</td></tr>";
       }
     }
@@ -150,13 +136,13 @@ $announcement_api =json_encode( catchApi("http://34.80.207.185/blackfin/API/main
 
       <div class="row justify-content-center">
         <div class="col-xl-9 d-flex align-items-center justify-content-between">
-          <h1 class="logo"><a href="index.html">KnightOne</a></h1>
+          <h1 class="logo"><a href="index.php">�?宿�??�?</a></h1>
           <!-- Uncomment below if you prefer to use an image logo -->
           <!-- <a href="index.html" class="logo"><img src="assets/img/logo.png" alt="" class="img-fluid"></a>-->
 
           <nav class="nav-menu d-none d-lg-block">
             <ul>
-              <li class="active"><a href="index.html">Home</a></li>
+              <li class="active"><a href="index.php">Home</a></li>
               <li><a href="#about">About</a></li>
               <li><a href="#services">Services</a></li>
               <li><a href="#portfolio">Portfolio</a></li>
@@ -197,7 +183,7 @@ $announcement_api =json_encode( catchApi("http://34.80.207.185/blackfin/API/main
         <div class="col-xl-8">
           <h1>KnightOne - Create Bootstrap Website Template</h1>
           <h2>We are team of designers making websites with Bootstrap</h2>
-          <a href="https://www.youtube.com/watch?v=jDDaplaOz7Q" class="venobox play-btn mb-4" data-vbtype="video" data-autoplay="true"></a>
+          <!-- <a href="https://www.youtube.com/watch?v=jDDaplaOz7Q" class="venobox play-btn mb-4" data-vbtype="video" data-autoplay="true"></a> -->
         </div>
       </div>
     </div>
@@ -210,34 +196,15 @@ $announcement_api =json_encode( catchApi("http://34.80.207.185/blackfin/API/main
       <div class="container">
 
         <div class="section-title">
-          <h2>公告</h2>
+          <h2>??��??</h2>
           <p>Magnam dolores commodi suscipit. Necessitatibus eius consequatur ex aliquid fuga eum quidem. Sit sint consectetur velit. Quisquam quos quisquam cupiditate. Et nemo qui impedit suscipit alias ea. Quia fugiat sit in iste officiis commodi quidem hic quas.</p>
         </div>
 
         <div class="row content">
           <div class="col-lg-6">
           <div id="annoucement">  
-            <!-- <table class="table table-hover">
-            <tr>
-              <td>
-                <button type="button" class="btn btn-danger" id="all_button">全部</button>
-                <button type="button" class="btn btn-success">公告</button>
-                <button type="button" class="btn btn-info">活動</button>
-                <button type="button" class="btn btn-warning">優惠</button>
-              </td>
-            </tr> -->
-
-            <!-- </table>
-            </div> -->
-          <!-- <script>
-          document.getElementById("all_button").addEventListener("click", function(){
-          document.inner(showAnnouncemnt("all"));
-           });
-          </script> -->
           <script>
             showAnnouncemnt("all");
-
-
           </script>
             <ul>
               <li><i class="ri-check-double-line"></i> Ullamco laboris nisi ut aliquip ex ea commodo consequat</li>
@@ -262,22 +229,23 @@ $announcement_api =json_encode( catchApi("http://34.80.207.185/blackfin/API/main
       <div class="container">
 
         <div class="section-title">
-          <h2>Services</h2>
+          <h2>�?宿�??�?</h2>
           <p>Magnam dolores commodi suscipit. Necessitatibus eius consequatur ex aliquid fuga eum quidem. Sit sint consectetur velit. Quisquam quos quisquam cupiditate. Et nemo qui impedit suscipit alias ea. Quia fugiat sit in iste officiis commodi quidem hic quas.</p>
         </div>
 
         <div class="row">
           <div class="col-lg-4 col-md-6 d-flex align-items-stretch">
             <div class="icon-box">
-              <div class="icon"><i class="bx bxl-dribbble"></i></div>
-              <h4><a href="">Lorem Ipsum</a></h4>
+              <!-- <div class="icon"><i class="bx bxl-dribbble"></i></div> -->
+              <img src="assets/img/info_1.jpg" alt="" width="100%">
+              <h4 style="text-align:center">Lorem Ipsum</h4>
               <p>Voluptatum deleniti atque corrupti quos dolores et quas molestias excepturi</p>
             </div>
           </div>
 
           <div class="col-lg-4 col-md-6 d-flex align-items-stretch mt-4 mt-md-0">
             <div class="icon-box">
-              <div class="icon"><i class="bx bx-file"></i></div>
+            <img src="assets/img/info_1.jpg" alt="" width="100%">
               <h4><a href="">Sed ut perspiciatis</a></h4>
               <p>Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore</p>
             </div>
@@ -285,7 +253,7 @@ $announcement_api =json_encode( catchApi("http://34.80.207.185/blackfin/API/main
 
           <div class="col-lg-4 col-md-6 d-flex align-items-stretch mt-4 mt-lg-0">
             <div class="icon-box">
-              <div class="icon"><i class="bx bx-tachometer"></i></div>
+            <img src="assets/img/info_1.jpg" alt="" width="100%">
               <h4><a href="">Magni Dolores</a></h4>
               <p>Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia</p>
             </div>
@@ -293,7 +261,7 @@ $announcement_api =json_encode( catchApi("http://34.80.207.185/blackfin/API/main
 
           <div class="col-lg-4 col-md-6 d-flex align-items-stretch mt-4">
             <div class="icon-box">
-              <div class="icon"><i class="bx bx-world"></i></div>
+            <img src="assets/img/info_1.jpg" alt="" width="100%">
               <h4><a href="">Nemo Enim</a></h4>
               <p>At vero eos et accusamus et iusto odio dignissimos ducimus qui blanditiis</p>
             </div>
@@ -301,7 +269,7 @@ $announcement_api =json_encode( catchApi("http://34.80.207.185/blackfin/API/main
 
           <div class="col-lg-4 col-md-6 d-flex align-items-stretch mt-4">
             <div class="icon-box">
-              <div class="icon"><i class="bx bx-slideshow"></i></div>
+            <img src="assets/img/info_1.jpg" alt="" width="100%">
               <h4><a href="">Dele cardo</a></h4>
               <p>Quis consequatur saepe eligendi voluptatem consequatur dolor consequuntur</p>
             </div>
@@ -309,7 +277,7 @@ $announcement_api =json_encode( catchApi("http://34.80.207.185/blackfin/API/main
 
           <div class="col-lg-4 col-md-6 d-flex align-items-stretch mt-4">
             <div class="icon-box">
-              <div class="icon"><i class="bx bx-arch"></i></div>
+            <img src="assets/img/info_1.jpg" alt="" width="100%">
               <h4><a href="">Divera don</a></h4>
               <p>Modi nostrum vel laborum. Porro fugit error sit minus sapiente sit aspernatur</p>
             </div>
