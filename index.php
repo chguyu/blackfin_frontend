@@ -24,16 +24,20 @@ curl_close($curl);
 return json_decode($response);
 }
 $announcement_api =json_encode(catchApi("http://34.80.207.185/blackfin/API/main.php?view=annoucement"));
-print_r($announcement_api);
+//print_r($announcement_api);
 //Instagram_API 
 $access_token = "IGQVJYcEpZAbEQ5akktNDZA3M3UwN2ZAzU1ZAsUFlKeUtwY0Fyd0V3VTZAGR1RaLWxGV2FraHN5M1pReUFsWXFSZAXk0Sk5GREkxSmhCaTlKeHc4aVR4TmJvZAkZAUVTBnT1dBQ0tEN3gxYUhJakE1NnJDUTJGTAZDZD...";
 $instagram_api = catchApi("https://graph.instagram.com/me/media?fields=id,media_type,media_url,permalink,timestamp,media,caption&access_token=".$access_token);
-//$instagram_api = 
 $instagram_api = $instagram_api->data;
-$instagram_api = json_encode($instagram_api);
-//$instagram_api = catchApi("https://graph.instagram.com/me/media?fields=id,media_type,media_url,permalink,timestamp,media,caption&access_token=".$access_token);
-//$instagram_api = unicodeDecode($instagram_api);
+function json_stringify($json) {
+    if (is_array($json)) $json = json_encode($json);
+    $search = array('\\', "\n", "\r", "\f", "\t", "\b", "'") ;
+    $replace = array('\\\\', "\\n", "\\r","\\f","\\t","\\b", "'");
+    return str_replace($search, $replace, $json);
+}
+$instagram_api = json_stringify($instagram_api);
 //print_r($instagram_api);
+
 ?>
 
 <!DOCTYPE html>
@@ -73,6 +77,11 @@ $instagram_api = json_encode($instagram_api);
     let announcemntJson = '<?= $announcement_api?>';
     announcemntJson = JSON.parse(announcemntJson);
     let instagramApi = '<?= $instagram_api?>';
+    //console.log(instagramApi);
+    //instagramApi = instagramApi.replace("\n","");
+    //instagramApi = instagramApi.replace("]","");
+    //let instagramApiArray = JSON.parse("["+instagramApi+"]");
+    instagramApi = JSON.parse(instagramApi);
     console.log(instagramApi);
     function showAnnouncemnt(type) {
         announcement_catch_type = "";
@@ -123,6 +132,26 @@ $instagram_api = json_encode($instagram_api);
             showAnnouncemnt("sale");
         });
     }
+    let instagram_catch_type = ""; 
+    let instagram_catch_mediaurl = "";
+    let instagram_catch_caption = "";
+    let instagram_catch_time = "";  
+    let instagram_return=""; 
+    function showInstagram(){
+        instagram_return="";
+        for (i = 0; i < instagramApi.length; i++) {
+            instagram_catch_type = instagramApi[i].media_type;
+            instagram_catch_mediaurl = instagramApi[i].media_url;
+            instagram_catch_caption = instagramApi[i].caption;
+            instagram_catch_time = instagramApi[i].timestamp;
+            instagram_return =instagram_return+"<div class=\"col-lg-4 col-md-6 d-flex align-items-stretch mt-4 mt-md-0\"><div class=\"icon-box\"><img src=\""+instagram_catch_mediaurl+"\" width=\"100%\"><h4><a></a></h4><p>"+instagram_catch_caption+"</p></div></div>" 
+        }
+        console.log(instagram_return);
+        document.getElementById('instagramcontent').innerHTML = instagram_return;
+        instagramcontent
+        return instagram_return;
+    }
+    //showInstagram();
     // function showInstagram(){
     //   for(i=0;instagram.length)
     // }
@@ -139,7 +168,13 @@ $instagram_api = json_encode($instagram_api);
 </head>
 
 <body>
-
+<!-- <div class="col-lg-4 col-md-6 d-flex align-items-stretch mt-4 mt-md-0">
+                        <div class="icon-box">
+                            <img src="assets/img/info_1.jpg" alt="" width="100%">
+                            <h4><a href="">Sed ut perspiciatis</a></h4>
+                            <p>Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore</p>
+                        </div>
+                    </div> -->
     <!-- ======= Header ======= -->
     <header id="header" class="fixed-top ">
         <div class="container-fluid">
@@ -247,7 +282,7 @@ $instagram_api = json_encode($instagram_api);
                         ea. Quia fugiat sit in iste officiis commodi quidem hic quas.</p>
                 </div>
 
-                <div class="row">
+                <div class="row" id="instagramcontent">
                     <div class="col-lg-4 col-md-6 d-flex align-items-stretch">
                         <div class="icon-box">
                             <!-- <div class="icon"><i class="bx bxl-dribbble"></i></div> -->
@@ -256,8 +291,8 @@ $instagram_api = json_encode($instagram_api);
                             <p>Voluptatum deleniti atque corrupti quos dolores et quas molestias excepturi</p>
                         </div>
                     </div>
-
-                    <div class="col-lg-4 col-md-6 d-flex align-items-stretch mt-4 mt-md-0">
+                    <script>showInstagram();</script>
+                    <!-- <div class="col-lg-4 col-md-6 d-flex align-items-stretch mt-4 mt-md-0">
                         <div class="icon-box">
                             <img src="assets/img/info_1.jpg" alt="" width="100%">
                             <h4><a href="">Sed ut perspiciatis</a></h4>
@@ -295,7 +330,7 @@ $instagram_api = json_encode($instagram_api);
                             <h4><a href="">Divera don</a></h4>
                             <p>Modi nostrum vel laborum. Porro fugit error sit minus sapiente sit aspernatur</p>
                         </div>
-                    </div>
+                    </div> -->
 
                 </div>
 
@@ -358,15 +393,12 @@ $instagram_api = json_encode($instagram_api);
         <!-- ======= Clients Section ======= -->
         <section id="clients" class="clients">
             <div class="container">
-
                 <div class="row no-gutters clients-wrap clearfix wow fadeInUp">
-
                     <div class="col-lg-3 col-md-4 col-xs-6">
                         <div class="client-logo">
                             <img src="assets/img/clients/client-1.png" class="img-fluid" alt="">
                         </div>
                     </div>
-
                     <div class="col-lg-3 col-md-4 col-xs-6">
                         <div class="client-logo">
                             <img src="assets/img/clients/client-2.png" class="img-fluid" alt="">
