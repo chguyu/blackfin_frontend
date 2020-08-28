@@ -242,12 +242,18 @@ $instagram_api = json_stringify($instagram_api);
 
     <!-- ======= Hero Section ======= -->
     <!-- <section id="hero" class="d-flex flex-column justify-content-center"> -->
-    <section class="d-flex flex-column justify-content-center" id="videocontainer">
+    <section  class="d-flex flex-column justify-content-center" id="hero">
         <div class="container">
             <div class="row justify-content-center">
                 <video id="myvideo" class="video-fluid" autoplay muted fill>
-                    <source src="assets/video/MAIN.mp4" type="video/mp4" />
+                    <source src="assets/video/MAIN(TINY).mp4" type="video/mp4" />
                 </video>
+                <script>
+                if(document.body.clientWidth<850){
+                document.getElementById('myvideo').src = "assets/video/main_mb.mp4"
+                document.getElementById('myvideo').style = "width: 100%"
+                }
+                </script>
                 <!-- <div class="col-xl-8">
                     <h1>主標題</h1>
                     <h2>副標題</h2>
@@ -256,10 +262,10 @@ $instagram_api = json_stringify($instagram_api);
             </div>
         </div>
     </section>
-    <script>
+    <!-- <script>
     let videoheight = document.getElementById('myvideo').offsetHeight;
     document.getElementById('videocontainer').style = "height:" + videoheight;
-    </script>
+    </script> -->
     <!-- </section>End Hero -->
     <main id="main">
         <!-- ======= About Us Section ======= -->
