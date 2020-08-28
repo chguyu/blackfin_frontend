@@ -23,8 +23,10 @@ $response = curl_exec($curl);
 curl_close($curl);
 return json_decode($response);
 }
-$announcement_api =json_encode(catchApi("http://34.80.207.185/blackfin/API/main.php?view=annoucement"));
+//$announcement_api =json_encode(catchApi("http://34.80.207.185/blackfin/API/main.php?view=annoucement&type=get"));
 //print_r($announcement_api);
+
+
 //Instagram_API 
 $access_token = "IGQVJYcEpZAbEQ5akktNDZA3M3UwN2ZAzU1ZAsUFlKeUtwY0Fyd0V3VTZAGR1RaLWxGV2FraHN5M1pReUFsWXFSZAXk0Sk5GREkxSmhCaTlKeHc4aVR4TmJvZAkZAUVTBnT1dBQ0tEN3gxYUhJakE1NnJDUTJGTAZDZD...";
 $instagram_api = catchApi("https://graph.instagram.com/me/media?fields=id,media_type,media_url,permalink,timestamp,media,caption&access_token=".$access_token);
@@ -54,8 +56,8 @@ $instagram_api = json_stringify($instagram_api);
     <!-- Favicons -->
     <link href="assets/img/favicon.png" rel="icon">
     <link href="assets/img/apple-touch-icon.png" rel="apple-touch-icon">
-
-    <!-- Google Fonts -->
+    <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+    <!-- <link rel="stylesheet" href="/resources/demos/style.css">    Google Fonts -->
     <link
         href="https://fonts.googleapis.com/css?family=Open+Sans:300,300i,400,400i,600,600i,700,700i|Raleway:300,300i,400,400i,500,500i,600,600i,700,700i|Poppins:300,300i,400,400i,500,500i,600,600i,700,700i"
         rel="stylesheet">
@@ -66,23 +68,23 @@ $instagram_api = json_stringify($instagram_api);
     <link href="assets/vendor/remixicon/remixicon.css" rel="stylesheet">
     <link href="assets/vendor/venobox/venobox.css" rel="stylesheet">
     <link href="assets/vendor/owl.carousel/assets/owl.carousel.min.css" rel="stylesheet">
-    <!-- Template Main CSS File -->
+    <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
+    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script> <!-- Template Main CSS File -->
+    <script src="assets/js/InstagramFeed.min.js"></script>
     <link href="assets/css/style.css" rel="stylesheet">
     <script>
+    var $j = jQuery.noConflict();
     let firstLoad = true;
     let apireturn = "";
     let announcement_catch_type = "";
     let announcement_catch_title = "";
     let announcement_catch_text = "";
-    let announcemntJson = '<?= $announcement_api?>';
-    announcemntJson = JSON.parse(announcemntJson);
+    // let announcemntJson = '<?//=$ announcement_api?>';
+    //announcemntJson = JSON.parse(announcemntJson);
     let instagramApi = '<?= $instagram_api?>';
-    //console.log(instagramApi);
-    //instagramApi = instagramApi.replace("\n","");
-    //instagramApi = instagramApi.replace("]","");
-    //let instagramApiArray = JSON.parse("["+instagramApi+"]");
     instagramApi = JSON.parse(instagramApi);
-    console.log(instagramApi);
+    //console.log(instagramApi);
+
     function showAnnouncemnt(type) {
         announcement_catch_type = "";
         announcement_catch_title = "";
@@ -114,7 +116,7 @@ $instagram_api = json_stringify($instagram_api);
             }
         }
         apireturn = apireturn + "</table></div>";
-        console.log(apireturn);
+        //console.log(apireturn);
         document.getElementById('annoucement').innerHTML = apireturn;
         document.getElementById("all_button").addEventListener("click", function() {
             showAnnouncemnt("all");
@@ -132,30 +134,47 @@ $instagram_api = json_stringify($instagram_api);
             showAnnouncemnt("sale");
         });
     }
-    let instagram_catch_type = ""; 
+    let instagram_catch_type = "";
     let instagram_catch_mediaurl = "";
     let instagram_catch_caption = "";
-    let instagram_catch_time = "";  
-    let instagram_return=""; 
-    function showInstagram(){
-        instagram_return="";
+    let instagram_catch_time = "";
+    let instagram_return = "";
+    let windowsWidth = 0;
+
+    function showInstagram() {
+        instagram_return = "";
+        windowsWidth = document.body.clientWidth;
+        //console.log(windowsWidth);
         for (i = 0; i < instagramApi.length; i++) {
             instagram_catch_type = instagramApi[i].media_type;
             instagram_catch_mediaurl = instagramApi[i].media_url;
             instagram_catch_caption = instagramApi[i].caption;
             instagram_catch_time = instagramApi[i].timestamp;
-            instagram_return =instagram_return+"<div class=\"col-lg-4 col-md-6 d-flex align-items-stretch mt-4 mt-md-0\"><div class=\"icon-box\"><img src=\""+instagram_catch_mediaurl+"\" width=\"100%\"><h4><a></a></h4><p>"+instagram_catch_caption+"</p></div></div>" 
+            //console.log(instagram_catch_caption.length);
+            if (instagram_catch_caption.length > 50) {
+                instagram_catch_caption = instagram_catch_caption.substring(0, 50) + "...";
+            }
+            instagram_return = instagram_return +
+                "<div class=\"col-lg-4 col-md-6 d-flex align-items-stretch mt-4 mt-md-0\"><div class=\"icon-box\"><img src=\"" +
+                instagram_catch_mediaurl + "\" width=\"100%\"><h4><a></a></h4><p>" + instagram_catch_caption +
+                "</p></div></div>"
         }
-        console.log(instagram_return);
+        //console.log(instagram_return);
         document.getElementById('instagramcontent').innerHTML = instagram_return;
-        instagramcontent
+        //instagramcontent
         return instagram_return;
     }
+
     //showInstagram();
     // function showInstagram(){
     //   for(i=0;instagram.length)
     // }
     //document.getElementById('annoucement').innerHTML=showAnnouncemnt("all");
+
+
+    $j(function() {
+        $j("#datepicker").datepicker();
+    });
     </script>
     <!-- =======================================================
   * Template Name: KnightOne - v2.1.0
@@ -164,11 +183,10 @@ $instagram_api = json_stringify($instagram_api);
   * License: https://bootstrapmade.com/license/
   ======================================================== -->
 
-
 </head>
 
 <body>
-<!-- <div class="col-lg-4 col-md-6 d-flex align-items-stretch mt-4 mt-md-0">
+    <!-- <div class="col-lg-4 col-md-6 d-flex align-items-stretch mt-4 mt-md-0">
                         <div class="icon-box">
                             <img src="assets/img/info_1.jpg" alt="" width="100%">
                             <h4><a href="">Sed ut perspiciatis</a></h4>
@@ -188,8 +206,8 @@ $instagram_api = json_stringify($instagram_api);
 
                     <nav class="nav-menu d-none d-lg-block">
                         <ul>
-                            <li class="active"><a href="index.php">Home</a></li>
-                            <li><a href="#about">About</a></li>
+                            <li class="active"><a href="index.php">首頁</a></li>
+                            <li><a href="#about">公告</a></li>
                             <li><a href="#services">Services</a></li>
                             <li><a href="#portfolio">Portfolio</a></li>
                             <li><a href="#pricing">Pricing</a></li>
@@ -223,17 +241,26 @@ $instagram_api = json_stringify($instagram_api);
     </header><!-- End Header -->
 
     <!-- ======= Hero Section ======= -->
-    <section id="hero" class="d-flex flex-column justify-content-center">
+    <!-- <section id="hero" class="d-flex flex-column justify-content-center"> -->
+    <section class="d-flex flex-column justify-content-center" id="videocontainer">
         <div class="container">
             <div class="row justify-content-center">
-                <div class="col-xl-8">
+                <video id="myvideo" class="video-fluid" autoplay muted fill>
+                    <source src="assets/video/MAIN.mp4" type="video/mp4" />
+                </video>
+                <!-- <div class="col-xl-8">
                     <h1>主標題</h1>
                     <h2>副標題</h2>
-                    <!-- <a href="https://www.youtube.com/watch?v=jDDaplaOz7Q" class="venobox play-btn mb-4" data-vbtype="video" data-autoplay="true"></a> -->
-                </div>
+                    <a href="https://www.youtube.com/watch?v=jDDaplaOz7Q" class="venobox play-btn mb-4" data-vbtype="video" data-autoplay="true"></a>
+                </div> -->
             </div>
         </div>
-    </section><!-- End Hero -->
+    </section>
+    <script>
+    let videoheight = document.getElementById('myvideo').offsetHeight;
+    document.getElementById('videocontainer').style = "height:" + videoheight;
+    </script>
+    <!-- </section>End Hero -->
     <main id="main">
         <!-- ======= About Us Section ======= -->
         <section id="about" class="about">
@@ -251,7 +278,7 @@ $instagram_api = json_stringify($instagram_api);
                     <div class="col-lg-12">
                         <div id="annoucement">
                             <script>
-                            showAnnouncemnt("all");
+                            //showAnnouncemnt("all");
                             </script>
                             <!-- <ul>
               <li><i class="ri-check-double-line"></i> Ullamco laboris nisi ut aliquip ex ea commodo consequat</li>
@@ -271,7 +298,6 @@ $instagram_api = json_stringify($instagram_api);
                 </div>
         </section><!-- End About Us Section -->
 
-        <!-- ======= Services Section ======= -->
         <section id="services" class="services">
             <div class="container">
 
@@ -291,7 +317,9 @@ $instagram_api = json_stringify($instagram_api);
                             <p>Voluptatum deleniti atque corrupti quos dolores et quas molestias excepturi</p>
                         </div>
                     </div>
-                    <script>showInstagram();</script>
+                    <script>
+                    //showInstagram();
+                    </script>
                     <!-- <div class="col-lg-4 col-md-6 d-flex align-items-stretch mt-4 mt-md-0">
                         <div class="icon-box">
                             <img src="assets/img/info_1.jpg" alt="" width="100%">
@@ -337,61 +365,114 @@ $instagram_api = json_stringify($instagram_api);
             </div>
         </section><!-- End Services Section -->
 
-        <!-- ======= Cta Section ======= -->
-        <section id="cta" class="cta">
-            <div class="container">
 
-                <div class="row">
-                    <div class="col-lg-9 text-center text-lg-left">
-                        <h3>Call To Action</h3>
-                        <p> Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla
-                            pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt
-                            mollit anim id est laborum.</p>
-                    </div>
-                    <div class="col-lg-3 cta-btn-container text-center">
-                        <a class="cta-btn align-middle" href="#">Call To Action</a>
-                    </div>
-                </div>
-
-            </div>
-        </section><!-- End Cta Section -->
 
         <!-- ======= Features Section ======= -->
         <section id="features" class="features">
             <div class="container">
-
+                <div class="col-log-12">
+                    <ul class="nav nav-tabs" style="font-size:0.5rem">
+                        <li class="nav-item">
+                            <a class="nav-link active" href="#">豪華四人房</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="#">標準四人房</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="#">豪華雙人房</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link disabled" href="#">標準雙人房</a>
+                        </li>
+                    </ul>
+                </div>
                 <div class="row">
-                    <div class="col-lg-6 order-2 order-lg-1">
+                    <div class="col-lg-6 order-1 order-lg-1">
                         <div class="icon-box mt-5 mt-lg-0">
                             <i class="bx bx-receipt"></i>
-                            <h4>Est labore ad</h4>
-                            <p>Consequuntur sunt aut quasi enim aliquam quae harum pariatur laboris nisi ut aliquip</p>
-                        </div>
-                        <div class="icon-box mt-5">
-                            <i class="bx bx-cube-alt"></i>
-                            <h4>Harum esse qui</h4>
-                            <p>Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt</p>
-                        </div>
-                        <div class="icon-box mt-5">
-                            <i class="bx bx-images"></i>
-                            <h4>Aut occaecati</h4>
-                            <p>Aut suscipit aut cum nemo deleniti aut omnis. Doloribus ut maiores omnis facere</p>
-                        </div>
-                        <div class="icon-box mt-5">
-                            <i class="bx bx-shield"></i>
-                            <h4>Beatae veritatis</h4>
-                            <p>Expedita veritatis consequuntur nihil tempore laudantium vitae denat pacta</p>
+                            <h4 style="line-height:48px" id="roomName">豪華四人房</h4>
+                            <div class="facilitiesChecklistSection" data-section-id="5" style="float:left;margin:5%">
+                                <h5>
+                                    <span class="facilityGroupIcon">
+                                        <svg class="bk-icon -iconset-bath hp__facility_group_icon" fill="#333333"
+                                            height="20" width="20" viewBox="0 0 128 128" role="presentation"
+                                            aria-hidden="true" focusable="false">
+                                            <path
+                                                d="M32 44a8 8 0 1 0-8-8 8 8 0 0 0 8 8zm80 41.9V94c0 7.7-5.3 14.4-12 17l2.7 2a4.2 4.2 0 0 1 .3 5.7 4 4 0 0 1-5.8.1L90 112H38l-7 6.7a4.2 4.2 0 0 1-5.7.3 4 4 0 0 1-.1-5.8L28 111c-6.8-2.6-12-9.3-12-17v-8.1A16.2 16.2 0 0 1 8 72a16 16 0 0 1 16-16h26a16.2 16.2 0 0 1 14-8 9.8 9.8 0 0 1 4 1 20 20 0 0 1 16-9 20 20 0 0 1 19.6 16c11.6 0 16.4 7.7 16.4 16 0 6.6-2.8 10.8-8 13.9zM32 52a16 16 0 1 1 16-16 16 16 0 0 1-16 16zm28-20a12 12 0 1 1 12-12 12 12 0 0 1-12 12zm0-8a4 4 0 1 0-4-4 4 4 0 0 0 4 4zm-5.3 40H24a8 8 0 1 0 0 16h80a8 8 0 0 0 0-16h-8s1-16-12-16a13.3 13.3 0 0 0-13 9 22 22 0 0 0-7-1c-7.8 0-9.3 8-9.3 8z">
+                                            </path>
+                                        </svg>
+                                    </span>
+                                    衛浴
+                                </h5>
+                                <ul>
+                                    <li><span data-name-en="Toilet paper" class="  ">衛生紙</span></li>
+                                    <li><span data-name-en="Towels" class="  ">毛巾</span></li>
+                                    <li><span data-name-en="fan" class="  ">吹風機</span></li>
+                                    <li><span data-name-en="shower" class="  ">沐浴乳</span></li>
+                                </ul>
+                            </div>
+                            <div class="facilitiesChecklistSection" data-section-id="5" style="float:left;margin:5%">
+                                <h5>
+                                    <span class="facilityGroupIcon">
+                                        <svg class="bk-icon -iconset-bath hp__facility_group_icon" fill="#333333"
+                                            height="20" width="20" viewBox="0 0 128 128" role="presentation"
+                                            aria-hidden="true" focusable="false">
+                                            <path
+                                                d="M32 44a8 8 0 1 0-8-8 8 8 0 0 0 8 8zm80 41.9V94c0 7.7-5.3 14.4-12 17l2.7 2a4.2 4.2 0 0 1 .3 5.7 4 4 0 0 1-5.8.1L90 112H38l-7 6.7a4.2 4.2 0 0 1-5.7.3 4 4 0 0 1-.1-5.8L28 111c-6.8-2.6-12-9.3-12-17v-8.1A16.2 16.2 0 0 1 8 72a16 16 0 0 1 16-16h26a16.2 16.2 0 0 1 14-8 9.8 9.8 0 0 1 4 1 20 20 0 0 1 16-9 20 20 0 0 1 19.6 16c11.6 0 16.4 7.7 16.4 16 0 6.6-2.8 10.8-8 13.9zM32 52a16 16 0 1 1 16-16 16 16 0 0 1-16 16zm28-20a12 12 0 1 1 12-12 12 12 0 0 1-12 12zm0-8a4 4 0 1 0-4-4 4 4 0 0 0 4 4zm-5.3 40H24a8 8 0 1 0 0 16h80a8 8 0 0 0 0-16h-8s1-16-12-16a13.3 13.3 0 0 0-13 9 22 22 0 0 0-7-1c-7.8 0-9.3 8-9.3 8z">
+                                            </path>
+                                        </svg>
+                                    </span>
+                                    衛浴
+                                </h5>
+                                <ul>
+                                    <li><span data-name-en="Toilet paper" class="  ">衛生紙</span></li>
+                                    <li><span data-name-en="Towels" class="  ">毛巾</span></li>
+                                    <li><span data-name-en="fan" class="  ">吹風機</span></li>
+                                    <li><span data-name-en="shower" class="  ">沐浴乳</span></li>
+                                </ul>
+                            </div>
                         </div>
                     </div>
-                    <div class="image col-lg-6 order-1 order-lg-2"
-                        style='background-image: url("assets/img/features.jpg");'></div>
+                    <div class="image col-lg-6 order-2 order-lg-2">
+                        <div id="carouselExampleIndicators" class="carousel slide" data-ride="carousel">
+                            <ol class="carousel-indicators">
+                                <li data-target="#carouselExampleIndicators" data-slide-to="0" class="active"></li>
+                                <li data-target="#carouselExampleIndicators" data-slide-to="1"></li>
+                                <li data-target="#carouselExampleIndicators" data-slide-to="2"></li>
+                            </ol>
+                            <div class="carousel-inner">
+                                <div class="carousel-item active">
+                                    <img class="d-block w-100" src="assets/img/hotel1.jpg" alt="First slide">
+                                </div>
+                                <div class="carousel-item">
+                                    <img class="d-block w-100" src="assets/img/hotel2.jpg" alt="Second slide">
+                                </div>
+                                <div class="carousel-item">
+                                    <img class="d-block w-100" src="assets/img/hotel3.jpg" alt="Third slide">
+                                </div>
+                            </div>
+                            <a class="carousel-control-prev" href="#carouselExampleIndicators" role="button"
+                                data-slide="prev">
+                                <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                                <span class="sr-only">Previous</span>
+                            </a>
+                            <a class="carousel-control-next" href="#carouselExampleIndicators" role="button"
+                                data-slide="next">
+                                <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                                <span class="sr-only">Next</span>
+                            </a>
+                        </div>
+
+
+
+
+                    </div>
                 </div>
 
             </div>
         </section><!-- End Features Section -->
-
         <!-- ======= Clients Section ======= -->
-        <section id="clients" class="clients">
+        <!-- <section id="clients" class="clients">
             <div class="container">
                 <div class="row no-gutters clients-wrap clearfix wow fadeInUp">
                     <div class="col-lg-3 col-md-4 col-xs-6">
@@ -444,10 +525,100 @@ $instagram_api = json_stringify($instagram_api);
                 </div>
 
             </div>
-        </section><!-- End Clients Section -->
+        </section>End Clients Section -->
+        <section id="check" class="clients">
+            <!-- <div class="contianer">
+    <div class="col-lg-12">
+    <table class="checkTime">
+    <tr>
+    <td>日期：</td><td><input type="text" id="datepicker"></td>
+    </tr>
+    </table>
+    </div>
+    </div> -->
+
+            <div id="booking" class="section">
+                <div class="section-center">
+                    <div class="container">
+                        <div class="row">
+                            <div class="col-md-7 col-md-push-5">
+                                <div class="booking-cta">
+                                    <h1>立即查詢!</h1>
+                                    <!-- <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Animi facere, soluta magnam consectetur molestias itaque
+								ad sint fugit architecto incidunt iste culpa perspiciatis possimus voluptates aliquid consequuntur cumque quasi.
+								Perspiciatis.
+							</p> -->
+                                </div>
+                            </div>
+                            <div class="col-md-4 col-md-pull-7">
+                                <div class="booking-form">
+                                    <form>
+                                        <!-- <div class="form-group">
+									<span class="form-label">Your Destination</span>
+									<input class="form-control" type="text" placeholder="Enter a destination or hotel name">
+								</div> -->
+                                        <div class="row no-margin">
+                                            <div class="col-sm-6">
+                                                <div class="form-group">
+                                                    <span class="form-label">入住日期</span>
+                                                    <input class="form-control" type="date" required>
+                                                </div>
+                                                <span class="in-out hidden-xs">&#8652;</span>
+                                            </div>
+                                            <div class="col-sm-6">
+                                                <div class="form-group">
+                                                    <span class="form-label">退房日期</span>
+                                                    <input class="form-control" type="date" required>
+                                                </div>
+                                            </div>
+                                            <!-- <div class="col-sm-4">
+										<div class="form-group">
+											<span class="form-label">Guests</span>
+											<select class="form-control">
+												<option>1</option>
+												<option>2</option>
+												<option>3</option>
+											</select>
+											<span class="select-arrow"></span>
+										</div>
+									</div> -->
+                                        </div>
+                                        <div class="form-btn">
+                                            <button class="submit-btn">查詢</button>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </section>
+
+
+        <!-- ======= Cta Section ======= -->
+        <section id="cta" class="cta">
+            <div class="container">
+
+                <div class="row">
+                    <div class="col-lg-9 text-center text-lg-left">
+                        <h3>立即預約</h3>
+                        <p> BOOK</p>
+                    </div>
+                    <div class="col-lg-3 cta-btn-container text-center">
+                        <a class="cta-btn align-middle" href="#">Booking.com</a>
+                    </div>
+                </div>
+
+            </div>
+        </section><!-- End Cta Section -->
+
+
+
 
         <!-- ======= Counts Section ======= -->
-        <section id="counts" class="counts">
+        <!-- <section id="counts" class="counts">
             <div class="container">
 
                 <div class="text-center title">
@@ -480,10 +651,10 @@ $instagram_api = json_stringify($instagram_api);
                 </div>
 
             </div>
-        </section><!-- End Counts Section -->
+        </section>End Counts Section -->
 
         <!-- ======= Portfolio Section ======= -->
-        <section id="portfolio" class="portfolio">
+        <!-- <section id="portfolio" class="portfolio">
             <div class="container">
 
                 <div class="section-title">
@@ -617,10 +788,10 @@ $instagram_api = json_stringify($instagram_api);
                 </div>
 
             </div>
-        </section><!-- End Portfolio Section -->
+        </section>End Portfolio Section -->
 
         <!-- ======= Pricing Section ======= -->
-        <section id="pricing" class="pricing">
+        <!-- <section id="pricing" class="pricing">
             <div class="container">
 
                 <div class="section-title">
@@ -687,9 +858,34 @@ $instagram_api = json_stringify($instagram_api);
                 </div>
 
             </div>
-        </section><!-- End Pricing Section -->
+        </section>End Pricing Section -->
 
         <!-- ======= Faq Section ======= -->
+       
+        <!-- ======= Services Section ======= -->
+        
+        <section id="services" class="services">
+            <div id="instagram-feed1" class="instagram_feed"></div>
+            <script>
+            (function() {
+                new InstagramFeed({
+                    'username': 'hirozzzz',
+                    'container': document.getElementById("instagram-feed1"),
+                    'display_profile': true,
+                    'display_biography': true,
+                    'display_gallery': true,
+                    'callback': null,
+                    'styling': true,
+                    'items': 9,
+                    'items_per_row': 3,
+                    'margin': 1,
+                    'lazy_load': true,
+                    'on_error': console.error
+                });
+            })();
+            </script>
+        </section>
+
         <section id="faq" class="faq">
             <div class="container-fluid">
 
@@ -763,6 +959,11 @@ $instagram_api = json_stringify($instagram_api);
             </div>
         </section><!-- End Faq Section -->
 
+
+
+
+
+
         <!-- ======= Contact Section ======= -->
         <section id="contact" class="contact">
             <div class="container">
@@ -777,10 +978,9 @@ $instagram_api = json_stringify($instagram_api);
 
             <div>
                 <iframe style="border:0; width: 100%; height: 350px;"
-                    src="https://www.google.com/maps/embed?pb=!1m14!1m8!1m3!1d12097.433213460943!2d-74.0062269!3d40.7101282!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0xb89d1fe6bc499443!2sDowntown+Conference+Center!5e0!3m2!1smk!2sbg!4v1539943755621"
+                    src="https://www.google.com/maps/embed?pb=!1m14!1m8!1m3!1d14794.40471941432!2d121.5412652!3d22.0265872!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x6e38a133ab715496!2z6buR6bCt6aOy5Yaw5a6_wrfomK3ltrwgQidGaW4gSG9zdGVs!5e0!3m2!1szh-TW!2stw!4v1598606158301!5m2!1szh-TW!2stw"
                     frameborder="0" allowfullscreen></iframe>
             </div>
-
             <div class="container">
 
                 <div class="row mt-5">
