@@ -6,7 +6,7 @@ function unicodeDecode($unicode_str){
   return $arr['str'];
 }
 //Announcement_API 
-$announcement_api_url = "http://34.80.207.185/blackfin/API/main.php?view=annoucement";
+// $announcement_api_url = "http://34.80.207.185/blackfin/API/main.php?view=annoucement";
 function catchApi($showWho){
 $curl = curl_init();
 $url = $showWho;
@@ -23,9 +23,8 @@ $response = curl_exec($curl);
 curl_close($curl);
 return json_decode($response);
 }
-//$announcement_api =json_encode(catchApi("http://34.80.207.185/blackfin/API/main.php?view=annoucement&type=get"));
-//print_r($announcement_api);
-
+$announcement_api =json_encode(catchApi("http://34.80.56.1/blackfin/API/main.php?view=annoucement&type=get"));
+print_r($announcement_api);
 
 //Instagram_API 
 $access_token = "IGQVJYcEpZAbEQ5akktNDZA3M3UwN2ZAzU1ZAsUFlKeUtwY0Fyd0V3VTZAGR1RaLWxGV2FraHN5M1pReUFsWXFSZAXk0Sk5GREkxSmhCaTlKeHc4aVR4TmJvZAkZAUVTBnT1dBQ0tEN3gxYUhJakE1NnJDUTJGTAZDZD...";
@@ -79,8 +78,8 @@ $instagram_api = json_stringify($instagram_api);
     let announcement_catch_type = "";
     let announcement_catch_title = "";
     let announcement_catch_text = "";
-    // let announcemntJson = '<?//=$ announcement_api?>';
-    //announcemntJson = JSON.parse(announcemntJson);
+    let announcemntJson = '<?= $announcement_api?>';
+    announcemntJson = JSON.parse(announcemntJson);
     let instagramApi = '<?= $instagram_api?>';
     instagramApi = JSON.parse(instagramApi);
     //console.log(instagramApi);
@@ -284,7 +283,7 @@ $instagram_api = json_stringify($instagram_api);
                     <div class="col-lg-12">
                         <div id="annoucement">
                             <script>
-                            //showAnnouncemnt("all");
+                            showAnnouncemnt("all");
                             </script>
                             <!-- <ul>
               <li><i class="ri-check-double-line"></i> Ullamco laboris nisi ut aliquip ex ea commodo consequat</li>
