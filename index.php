@@ -24,7 +24,7 @@ curl_close($curl);
 return json_decode($response);
 }
 $announcement_api =json_encode(catchApi("http://34.80.56.1/blackfin/API/main.php?view=annoucement&type=get"));
-print_r($announcement_api);
+//print_r($announcement_api);
 
 //Instagram_API 
 $access_token = "IGQVJYcEpZAbEQ5akktNDZA3M3UwN2ZAzU1ZAsUFlKeUtwY0Fyd0V3VTZAGR1RaLWxGV2FraHN5M1pReUFsWXFSZAXk0Sk5GREkxSmhCaTlKeHc4aVR4TmJvZAkZAUVTBnT1dBQ0tEN3gxYUhJakE1NnJDUTJGTAZDZD...";
@@ -67,6 +67,7 @@ $instagram_api = json_stringify($instagram_api);
     <link href="assets/vendor/remixicon/remixicon.css" rel="stylesheet">
     <link href="assets/vendor/venobox/venobox.css" rel="stylesheet">
     <link href="assets/vendor/owl.carousel/assets/owl.carousel.min.css" rel="stylesheet">
+
     <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
     <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script> <!-- Template Main CSS File -->
     <script src="assets/js/InstagramFeed.min.js"></script>
@@ -88,50 +89,91 @@ $instagram_api = json_stringify($instagram_api);
         announcement_catch_type = "";
         announcement_catch_title = "";
         announcement_catch_text = "";
-        apireturn =
-            "<table class=\"table table-hover\"><tr><td><button type=\"button\" class=\"btn btn-danger\" id=\"all_button\">全部</button><button type=\"button\" class=\"btn btn-success\" id=\"ann_button\">公告</button><button type=\"button\" class=\"btn btn-info\" id=\"event_button\">活動</button><button type=\"button\" class=\"btn btn-warning\" id=\"sale_button\">優惠</button></td></tr>";
+        apireturn = "<ul class=\"timeline\">";
+        //apireturn ="<table class=\"table table-hover\"><tr><td><button type=\"button\" class=\"btn btn-danger\" id=\"all_button\">全部</button><button type=\"button\" class=\"btn btn-success\" id=\"ann_button\">公告</button><button type=\"button\" class=\"btn btn-info\" id=\"event_button\">活動</button><button type=\"button\" class=\"btn btn-warning\" id=\"sale_button\">優惠</button></td></tr>";
         for (i = 0; i < announcemntJson.length; i++) {
             announcement_catch_type = announcemntJson[i].announcementType;
             announcement_catch_title = announcemntJson[i].announcementTitle;
             announcement_catch_text = announcemntJson[i].announcementText;
+            announcement_catch_time = announcemntJson[i].announcementTime;
+            // if (type == "all") {
+            //     apireturn = apireturn + "<tr><td>" + announcement_catch_type + "</td><td>" + announcement_catch_title +
+            //         "</td><td>" + announcement_catch_text + "</td></tr>";
+            // } else if (type == "event") {
+            //     if (announcement_catch_type == "活動") {
+            //         apireturn = apireturn + "<tr><td>" + announcement_catch_type + "</td><td>" +
+            //             announcement_catch_title + "</td><td>" + announcement_catch_text + "</td></tr>";
+            //     }
+            // } else if (type == "sale") {
+            //     if (announcement_catch_type == "優惠") {
+            //         apireturn = apireturn + "<tr><td>" + announcement_catch_type + "</td><td>" +
+            //             announcement_catch_title + "</td><td>" + announcement_catch_text + "</td></tr>";
+            //     }
+            // } else if (type == "ann") {
+            //     if (announcement_catch_type == "公告") {
+            //         apireturn = apireturn + "<tr><td>" + announcement_catch_type + "</td><td>" +
+            //             announcement_catch_title + "</td><td>" + announcement_catch_text + "</td></tr>";
+            //     }
+            // }
             if (type == "all") {
-                apireturn = apireturn + "<tr><td>" + announcement_catch_type + "</td><td>" + announcement_catch_title +
-                    "</td><td>" + announcement_catch_text + "</td></tr>";
+                apireturn = apireturn + "<li><a target=\"_blank\" href=\"#\">" + announcement_catch_title +
+                    "</a><a href=\"#\" class=\"float-right\">" + announcement_catch_time + "</a><p>" +
+                    announcement_catch_text +
+                    "</p></li>";
             } else if (type == "event") {
                 if (announcement_catch_type == "活動") {
-                    apireturn = apireturn + "<tr><td>" + announcement_catch_type + "</td><td>" +
-                        announcement_catch_title + "</td><td>" + announcement_catch_text + "</td></tr>";
+                    apireturn = apireturn + "<li><a target=\"_blank\" href=\"#\">" + announcement_catch_title +
+                        "</a><a href=\"#\" class=\"float-right\">" + announcement_catch_time + "</a><p>" +
+                        announcement_catch_text +
+                        "</p></li>";
                 }
             } else if (type == "sale") {
                 if (announcement_catch_type == "優惠") {
-                    apireturn = apireturn + "<tr><td>" + announcement_catch_type + "</td><td>" +
-                        announcement_catch_title + "</td><td>" + announcement_catch_text + "</td></tr>";
+                    apireturn = apireturn + "<li><a target=\"_blank\" href=\"#\">" + announcement_catch_title +
+                        "</a><a href=\"#\" class=\"float-right\">" + announcement_catch_time + "</a><p>" +
+                        announcement_catch_text +
+                        "</p></li>";
                 }
             } else if (type == "ann") {
                 if (announcement_catch_type == "公告") {
-                    apireturn = apireturn + "<tr><td>" + announcement_catch_type + "</td><td>" +
-                        announcement_catch_title + "</td><td>" + announcement_catch_text + "</td></tr>";
+                    apireturn = apireturn + "<li><a target=\"_blank\" href=\"#\">" + announcement_catch_title +
+                        "</a><a href=\"#\" class=\"float-right\">" + announcement_catch_time + "</a><p>" +
+                        announcement_catch_text +
+                        "</p></li>";
                 }
             }
+
+
+
+
         }
-        apireturn = apireturn + "</table></div>";
+        // <li>
+        //                 <!--"_blank" tıklanan linkin yeni sekmede açılmasını sağlar.-->
+        //                 <a target="_blank" href="#">News Headline</a>
+        //                 <a href="#" class="float-right">09 Ocak, 2019</a>
+        //                 <p>Haberler burada gözükecek..Haberler burada gözükecek..Haberler burada
+        //                   gözükecek..Haberler burada gözükecek..Haberler burada gözükecek..</p>
+        //               </li>
+        // apireturn = apireturn + "</table></div>";
         //console.log(apireturn);
+        apireturn = apireturn + "</ul>";
+        console.log(apireturn);
         document.getElementById('annoucement').innerHTML = apireturn;
-        document.getElementById("all_button").addEventListener("click", function() {
-            showAnnouncemnt("all");
-        });
+        // document.getElementById("all_button").addEventListener("click", function() {
+        //     showAnnouncemnt("all");
+        // });
 
-        document.getElementById("ann_button").addEventListener("click", function() {
-            showAnnouncemnt("ann");
-        });
+        // document.getElementById("ann_button").addEventListener("click", function() {
+        //     showAnnouncemnt("ann");
+        // });
 
-        document.getElementById("event_button").addEventListener("click", function() {
-            showAnnouncemnt("event");
-        });
+        // document.getElementById("event_button").addEventListener("click", function() {
+        //     showAnnouncemnt("event");
+        // });
 
-        document.getElementById("sale_button").addEventListener("click", function() {
-            showAnnouncemnt("sale");
-        });
+        // document.getElementById("sale_button").addEventListener("click", function() {
+        //     showAnnouncemnt("sale");
+        // });
     }
     let instagram_catch_type = "";
     let instagram_catch_mediaurl = "";
@@ -207,10 +249,10 @@ $instagram_api = json_stringify($instagram_api);
                         <ul>
                             <li class="active"><a href="index.php">首頁</a></li>
                             <li><a href="#about">公告</a></li>
-                            <li><a href="#services">Services</a></li>
-                            <li><a href="#portfolio">Portfolio</a></li>
-                            <li><a href="#pricing">Pricing</a></li>
-                            <li class="drop-down"><a href="">Drop Down</a>
+                            <li><a href="#roomIntro">房間介紹</a></li>
+                            <li><a href="#check">房間預訂</a></li>
+                            <li><a href="#insta">IG官方帳號</a></li>
+                            <!-- <li class="drop-down"><a href="">Drop Down</a>
                                 <ul>
                                     <li><a href="#">Drop Down 1</a></li>
                                     <li class="drop-down"><a href="#">Deep Drop Down</a>
@@ -226,7 +268,7 @@ $instagram_api = json_stringify($instagram_api);
                                     <li><a href="#">Drop Down 3</a></li>
                                     <li><a href="#">Drop Down 4</a></li>
                                 </ul>
-                            </li>
+                            </li> -->
                             <li><a href="#contact">Contact</a></li>
 
                         </ul>
@@ -241,16 +283,20 @@ $instagram_api = json_stringify($instagram_api);
 
     <!-- ======= Hero Section ======= -->
     <!-- <section id="hero" class="d-flex flex-column justify-content-center"> -->
-    <section  class="d-flex flex-column justify-content-center" id="hero">
+    <section class="d-flex flex-column justify-content-center" id="hero">
         <div class="container">
-            <div class="row justify-content-center">
-                <video id="myvideo" class="video-fluid" autoplay muted fill>
-                    <source src="assets/video/MAIN(TINY).mp4" type="video/mp4" />
-                </video>
+            <div class="row justify-content-center" id="mainVideo">
+
                 <script>
-                if(document.body.clientWidth<850){
-                document.getElementById('myvideo').src = "assets/video/main_mb.mp4"
-                document.getElementById('myvideo').style = "width: 100%"
+                let video_PC =
+                    "<video id=\"myvideo\" class=\"video-fluid\" autoplay muted fill><source src=\"assets/video/MAIN(TINY).mp4\" type=\"video/mp4\"/></video>"
+                let video_MB = "<img src=\"assets/img/MAIN_MB.gif\" id=\"video_MB\" class=\"img-fluid\"alt=\"\">";
+                let PIC_MB = "<img src=\"assets/img/MAIN_MB.png\" id=\"video_MB\" class=\"img-fluid\"alt=\"\">";
+                if (document.body.clientWidth > 850) {
+                    document.getElementById('mainVideo').innerHTML = video_PC;
+                } else {
+                    document.getElementById('mainVideo').innerHTML = video_MB;
+                    setTimeout(function(){document.getElementById('mainVideo').innerHTML=PIC_MB}, 5000);
                 }
                 </script>
                 <!-- <div class="col-xl-8">
@@ -270,40 +316,83 @@ $instagram_api = json_stringify($instagram_api);
         <!-- ======= About Us Section ======= -->
         <section id="about" class="about">
             <div class="container">
-                <div class="section-title">
-                    <h2>民宿公告</h2>
-                    <p>➡️訂房請加LINE：0980097753(電話號碼搜尋)</p>
-                    <p>➡️黑鰭訂房現況表：reurl.cc/203vGE</p>
-                    <p>✳️包棟享優惠(人數10-14人)無法加床</p>
-                    <p>✳️高餐、興大附農（台中高農）享校友優惠😀</p>
-                    <p>✳️烏日人、伸港人享曾經的家鄉優惠🤗</p>
-                    <p>✳️我的朋友就不用說了，打到骨折😘</p>
-                </div>
-                <div class="row content">
-                    <div class="col-lg-12">
-                        <div id="annoucement">
-                            <script>
-                            showAnnouncemnt("all");
-                            </script>
-                            <!-- <ul>
-              <li><i class="ri-check-double-line"></i> Ullamco laboris nisi ut aliquip ex ea commodo consequat</li>
-              <li><i class="ri-check-double-line"></i> Duis aute irure dolor in reprehenderit in voluptate velit</li>
-              <li><i class="ri-check-double-line"></i> Ullamco laboris nisi ut aliquip ex ea commodo consequat</li>
-            </ul> -->
+
+
+
+                <div class="container" style="width:100%">
+                    <div class="row" style="margin:0px auto">
+                        <div class="card border golge" style="width:100%">
+                            <div class="card-header"><a href="javascript:void(0)" class="isteColor">
+                                    <h5 class="text-center m-2" style="font-weight: bold">最新消息</h5>
+                                </a></div>
+                            <h5 class="text-center m-2" style="font-weight: bold">
+                                <a href="javascript:void(0)" class="badge badge-primary" id="all_button">全部</a>
+                                <a href="javascript:void(0)" class="badge badge-secondary" id="ann_button">公告</a>
+                                <a href="javascript:void(0)" class="badge badge-success" id="event_button">活動</a>
+                                <a href="javascript:void(0)" class="badge badge-danger" id="sale_button">優惠</a>
+                            </h5>
+                            <div class="card-body" style="height:500px;overflow:auto">
+                                <div class="carousel vert slide" data-ride="carousel" data-interval="2000">
+                                    <div class="carousel-inner">
+                                        <div class="carousel-item active" id="annoucement">
+
+                                            <ul class="timeline">
+                                                <li>
+                                                    <a target="_blank" href="#">News Headline</a>
+                                                    <a href="#" class="float-right">09 Ocak, 2019</a>
+                                                    <p>1</p>
+                                                </li>
+                                                <hr>
+                                                <li>
+                                                    <a href="#">News Headline</a>
+                                                    <a href="#" class="float-right">4 Temmuz, 2018</a>
+                                                    <p>2</p>
+                                                </li>
+                                                <hr>
+                                                <li>
+                                                    <a href="#">News Headline</a>
+                                                    <a href="#" class="float-right">4 Temmuz, 2018</a>
+                                                    <p>3</p>
+                                                </li>
+                                            </ul>
+
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
-                        <!-- <div class="col-lg-6 pt-4 pt-lg-0">
-            <p>
-              Ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate
-              velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in
-              culpa qui officia deserunt mollit anim id est laborum.
-            </p>
-            <a href="#" class="btn-learn-more">Learn More</a>
-          </div> -->
                     </div>
                 </div>
+                <script>
+                showAnnouncemnt("all");
+                document.getElementById("all_button").addEventListener("click", function() {
+                    showAnnouncemnt("all");
+                });
+
+                document.getElementById("ann_button").addEventListener("click", function() {
+                    showAnnouncemnt("ann");
+                });
+
+                document.getElementById("event_button").addEventListener("click", function() {
+                    showAnnouncemnt("event");
+                });
+
+                document.getElementById("sale_button").addEventListener("click", function() {
+                    showAnnouncemnt("sale");
+                });
+                </script>
+
+
+
+
+
+
         </section><!-- End About Us Section -->
 
-        <section id="services" class="services">
+
+
+
+        <!-- <section id="services" class="services">
             <div class="container">
 
                 <div class="section-title">
@@ -315,17 +404,17 @@ $instagram_api = json_stringify($instagram_api);
 
                 <div class="row" id="instagramcontent">
                     <div class="col-lg-4 col-md-6 d-flex align-items-stretch">
-                        <div class="icon-box">
-                            <!-- <div class="icon"><i class="bx bxl-dribbble"></i></div> -->
-                            <img src="assets/img/info_1.jpg" alt="" width="100%">
+                        <div class="icon-box"> -->
+        <!-- <div class="icon"><i class="bx bxl-dribbble"></i></div> -->
+        <!-- <img src="assets/img/info_1.jpg" alt="" width="100%">
                             <h4 style="text-align:center">Lorem Ipsum</h4>
                             <p>Voluptatum deleniti atque corrupti quos dolores et quas molestias excepturi</p>
                         </div>
-                    </div>
-                    <script>
-                    //showInstagram();
-                    </script>
-                    <!-- <div class="col-lg-4 col-md-6 d-flex align-items-stretch mt-4 mt-md-0">
+                    </div> -->
+        <script>
+        //showInstagram();
+        </script>
+        <!-- <div class="col-lg-4 col-md-6 d-flex align-items-stretch mt-4 mt-md-0">
                         <div class="icon-box">
                             <img src="assets/img/info_1.jpg" alt="" width="100%">
                             <h4><a href="">Sed ut perspiciatis</a></h4>
@@ -364,16 +453,16 @@ $instagram_api = json_stringify($instagram_api);
                             <p>Modi nostrum vel laborum. Porro fugit error sit minus sapiente sit aspernatur</p>
                         </div>
                     </div> -->
-
+        <!-- 
                 </div>
 
             </div>
-        </section><!-- End Services Section -->
+        </section>End Services Section -->
 
 
 
         <!-- ======= Features Section ======= -->
-        <section id="features" class="features">
+        <!-- <section id="features" class="features">
             <div class="container">
                 <div class="col-log-12">
                     <ul class="nav nav-tabs" style="font-size:0.5rem">
@@ -475,7 +564,203 @@ $instagram_api = json_stringify($instagram_api);
                 </div>
 
             </div>
-        </section><!-- End Features Section -->
+        </section>
+         -->
+
+
+
+        <section class="clients" id="roomIntro">
+            <div class="container" style="width:100%">
+                <h2>房間介紹</h2>
+                <div class="col-lg-12" style="width:100%" id="roomNameDiv">
+                    <ul class="nav nav-tabs" style="font-size:90%" id="roomName">
+                        <li class="nav-item">
+                            <a class="nav-link" href="javascript:void(0)">豪華四人房</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="javascript:void(0)">標準四人房</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="javascript:void(0)">豪華雙人房</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="javascript:void(0)">標準雙人房</a>
+                        </li>
+                    </ul>
+                </div>
+                <div class="row">
+                    <div class="col-lg-6">
+                        <div id="carouselExampleIndicators" class="carousel slide" data-ride="carousel">
+                            <ol class="carousel-indicators">
+                                <li data-target="#carouselExampleIndicators" data-slide-to="0" class="active"></li>
+                                <li data-target="#carouselExampleIndicators" data-slide-to="1"></li>
+                                <li data-target="#carouselExampleIndicators" data-slide-to="2"></li>
+                            </ol>
+                            <div class="carousel-inner">
+                                <div class="carousel-item active">
+                                    <img class="d-block w-100" src="assets/img/hotel1.jpg" alt="First slide">
+                                </div>
+                                <div class="carousel-item">
+                                    <img class="d-block w-100" src="assets/img/hotel2.jpg" alt="Second slide">
+                                </div>
+                                <div class="carousel-item">
+                                    <img class="d-block w-100" src="assets/img/hotel3.jpg" alt="Third slide">
+                                </div>
+                            </div>
+                            <a class="carousel-control-prev" href="#carouselExampleIndicators" role="button"
+                                data-slide="prev">
+                                <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                                <span class="sr-only">Previous</span>
+                            </a>
+                            <a class="carousel-control-next" href="#carouselExampleIndicators" role="button"
+                                data-slide="next">
+                                <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                                <span class="sr-only">Next</span>
+                            </a>
+                        </div>
+                    </div>
+                    <div class="col-lg-6">
+                        <div class="product-dtl" style="padding-top:10px">
+                            <div class="product-info">
+                                <div class="product-name"><a href="javascript:void(0)">豪華四人房</a></div>
+                                <!-- <div class="reviews-counter">
+                                <div class="rate">
+                                    <input type="radio" id="star5" name="rate" value="5" checked />
+                                    <label for="star5" title="text">5 stars</label>
+                                    <input type="radio" id="star4" name="rate" value="4" checked />
+                                    <label for="star4" title="text">4 stars</label>
+                                    <input type="radio" id="star3" name="rate" value="3" checked />
+                                    <label for="star3" title="text">3 stars</label>
+                                    <input type="radio" id="star2" name="rate" value="2" />
+                                    <label for="star2" title="text">2 stars</label>
+                                    <input type="radio" id="star1" name="rate" value="1" />
+                                    <label for="star1" title="text">1 star</label>
+                                </div>
+                                <span>3 Reviews</span>
+                            </div> -->
+                                <div class="product-price-discount"><span>$2390.00</span><span
+                                        class="line-through">$2990.00</span></div>
+                                <div class="table-responsive-lg">
+                                    <table class="table table-borderless table-hover" style="font-size:85%;">
+                                        <tbody>
+                                            <tr>
+                                                <td>
+                                                    <svg width="2em" height="2em" viewBox="0 0 16 16"
+                                                        class="bi bi-check text-success" fill="currentColor"
+                                                        xmlns="http://www.w3.org/2000/svg">
+                                                        <path fill-rule="evenodd"
+                                                            d="M10.97 4.97a.75.75 0 0 1 1.071 1.05l-3.992 4.99a.75.75 0 0 1-1.08.02L4.324 8.384a.75.75 0 1 1 1.06-1.06l2.094 2.093 3.473-4.425a.236.236 0 0 1 .02-.022z" />
+                                                    </svg>
+                                                    桌子
+                                                </td>
+                                                <td>
+                                                    <svg width="2em" height="2em" viewBox="0 0 16 16"
+                                                        class="bi bi-x text-danger" fill="currentColor"
+                                                        xmlns="http://www.w3.org/2000/svg">
+                                                        <path fill-rule="evenodd"
+                                                            d="M4.646 4.646a.5.5 0 0 1 .708 0L8 7.293l2.646-2.647a.5.5 0 0 1 .708.708L8.707 8l2.647 2.646a.5.5 0 0 1-.708.708L8 8.707l-2.646 2.647a.5.5 0 0 1-.708-.708L7.293 8 4.646 5.354a.5.5 0 0 1 0-.708z" />
+                                                    </svg>
+                                                    椅子
+                                                </td>
+                                                <td>
+                                                    <svg width="2em" height="2em" viewBox="0 0 16 16"
+                                                        class="bi bi-check text-success" fill="currentColor"
+                                                        xmlns="http://www.w3.org/2000/svg">
+                                                        <path fill-rule="evenodd"
+                                                            d="M10.97 4.97a.75.75 0 0 1 1.071 1.05l-3.992 4.99a.75.75 0 0 1-1.08.02L4.324 8.384a.75.75 0 1 1 1.06-1.06l2.094 2.093 3.473-4.425a.236.236 0 0 1 .02-.022z" />
+                                                    </svg>
+                                                    電視
+                                                </td>
+                                                <td>
+                                                    <svg width="2em" height="2em" viewBox="0 0 16 16"
+                                                        class="bi bi-check text-success" fill="currentColor"
+                                                        xmlns="http://www.w3.org/2000/svg">
+                                                        <path fill-rule="evenodd"
+                                                            d="M10.97 4.97a.75.75 0 0 1 1.071 1.05l-3.992 4.99a.75.75 0 0 1-1.08.02L4.324 8.384a.75.75 0 1 1 1.06-1.06l2.094 2.093 3.473-4.425a.236.236 0 0 1 .02-.022z" />
+                                                    </svg>
+                                                    第四台
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td>
+                                                <svg width="2em" height="2em" viewBox="0 0 16 16"
+                                                        class="bi bi-check text-success" fill="currentColor"
+                                                        xmlns="http://www.w3.org/2000/svg">
+                                                        <path fill-rule="evenodd"
+                                                            d="M10.97 4.97a.75.75 0 0 1 1.071 1.05l-3.992 4.99a.75.75 0 0 1-1.08.02L4.324 8.384a.75.75 0 1 1 1.06-1.06l2.094 2.093 3.473-4.425a.236.236 0 0 1 .02-.022z" />
+                                                    </svg>
+                                                    浴巾
+                                                </td>
+                                                <td>
+                                                <svg width="2em" height="2em" viewBox="0 0 16 16"
+                                                        class="bi bi-check text-success" fill="currentColor"
+                                                        xmlns="http://www.w3.org/2000/svg">
+                                                        <path fill-rule="evenodd"
+                                                            d="M10.97 4.97a.75.75 0 0 1 1.071 1.05l-3.992 4.99a.75.75 0 0 1-1.08.02L4.324 8.384a.75.75 0 1 1 1.06-1.06l2.094 2.093 3.473-4.425a.236.236 0 0 1 .02-.022z" />
+                                                    </svg>
+                                                    盥洗用具
+                                                </td>
+                                                <td>
+                                                <svg width="2em" height="2em" viewBox="0 0 16 16"
+                                                        class="bi bi-check text-success" fill="currentColor"
+                                                        xmlns="http://www.w3.org/2000/svg">
+                                                        <path fill-rule="evenodd"
+                                                            d="M10.97 4.97a.75.75 0 0 1 1.071 1.05l-3.992 4.99a.75.75 0 0 1-1.08.02L4.324 8.384a.75.75 0 1 1 1.06-1.06l2.094 2.093 3.473-4.425a.236.236 0 0 1 .02-.022z" />
+                                                    </svg>    
+                                                吹風機
+                                                </td>
+                                                <td>
+                                                <svg width="2em" height="2em" viewBox="0 0 16 16"
+                                                        class="bi bi-check text-success" fill="currentColor"
+                                                        xmlns="http://www.w3.org/2000/svg">
+                                                        <path fill-rule="evenodd"
+                                                            d="M10.97 4.97a.75.75 0 0 1 1.071 1.05l-3.992 4.99a.75.75 0 0 1-1.08.02L4.324 8.384a.75.75 0 1 1 1.06-1.06l2.094 2.093 3.473-4.425a.236.236 0 0 1 .02-.022z" />
+                                                    </svg>
+                                                    衣櫃
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td><svg width="2em" height="2em" viewBox="0 0 16 16"
+                                                        class="bi bi-x text-danger" fill="currentColor"
+                                                        xmlns="http://www.w3.org/2000/svg">
+                                                        <path fill-rule="evenodd"
+                                                            d="M4.646 4.646a.5.5 0 0 1 .708 0L8 7.293l2.646-2.647a.5.5 0 0 1 .708.708L8.707 8l2.647 2.646a.5.5 0 0 1-.708.708L8 8.707l-2.646 2.647a.5.5 0 0 1-.708-.708L7.293 8 4.646 5.354a.5.5 0 0 1 0-.708z" />
+                                                    </svg>
+                                                    浴缸
+                                                </td>
+                                                <td>
+                                                <svg width="2em" height="2em" viewBox="0 0 16 16"
+                                                        class="bi bi-check text-success" fill="currentColor"
+                                                        xmlns="http://www.w3.org/2000/svg">
+                                                        <path fill-rule="evenodd"
+                                                            d="M10.97 4.97a.75.75 0 0 1 1.071 1.05l-3.992 4.99a.75.75 0 0 1-1.08.02L4.324 8.384a.75.75 0 1 1 1.06-1.06l2.094 2.093 3.473-4.425a.236.236 0 0 1 .02-.022z" />
+                                                    </svg>
+                                                    熱水壺
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+
+                            <p style="clear:both">Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do
+                                eiusmod
+                                tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis
+                                nostrud
+                                exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</p>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+            </div>
+        </section>
+
+
+
+
+
+        <!-- End Features Section -->
         <!-- ======= Clients Section ======= -->
         <!-- <section id="clients" class="clients">
             <div class="container">
@@ -866,10 +1151,10 @@ $instagram_api = json_stringify($instagram_api);
         </section>End Pricing Section -->
 
         <!-- ======= Faq Section ======= -->
-       
+
         <!-- ======= Services Section ======= -->
-        
-        <section id="services" class="services">
+
+        <section id="insta" class="services">
             <div id="instagram-feed1" class="instagram_feed"></div>
             <script>
             (function() {
@@ -1094,6 +1379,7 @@ $instagram_api = json_stringify($instagram_api);
     <script src="assets/vendor/jquery.easing/jquery.easing.min.js"></script>
     <script src="assets/vendor/php-email-form/validate.js"></script>
     <script src="assets/vendor/waypoints/jquery.waypoints.min.js"></script>
+    <script src="assets/js/my.js"></script>
     <!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/waypoints/2.0.5/waypoints.min.js"></script> -->
     <script src="assets/vendor/counterup/counterup.min.js"></script>
     <script src="assets/vendor/isotope-layout/isotope.pkgd.min.js"></script>
